@@ -21,7 +21,7 @@ FROM openjdk:8-jre-alpine
 
 WORKDIR /server
 
-COPY ./server/eula.txt .
+COPY ./server .
 COPY --from=0 /server .
 
 # Expose default Minecraft port and start server
