@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: docker:17.05.0-ce-git
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - setup_remote_docker
@@ -25,45 +28,19 @@ jobs:
           command: |
             mkdir -p /caches
             docker save -o /caches/docker-image-cache.tar minecraft-forge
+      - run:
+          name: "Tag and Push Docker image to Docker Hub"
+          command: |
+            if [ -z $CIRCLE_TAG ]; then
+              echo "No tags were pushed. Skip step."
+            else
+              docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+              docker tag minecraft-forge bckr/minecraft-forge:latest
+              docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
+              docker push bckr/minecraft-forge:$CIRCLE_TAG
+              docker push bckr/minecraft-forge:latest
+            fi
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/docker-image-cache.tar
-  deploy:
-    docker:
-      - image: docker:17.05.0-ce-git
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-    steps:
-      - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/docker-image-cache.tar
-      - run:
-          name: "Tag and Push Docker image to Docker Hub"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
-              docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
-              docker tag minecraft-forge bckr/minecraft-forge:latest
-              docker push bckr/minecraft-forge:$CIRCLE_TAG
-            fi
-workflows:
-  version: 2
-  main:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
-      - deploy:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /^[0-9]\+\.[0-9]\+\.[0-9]\+$/
-            branches:
-              ignore: /.*/
