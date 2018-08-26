@@ -36,6 +36,7 @@ jobs:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
     steps:
+      - checkout
       - setup_remote_docker
       - restore_cache:
           keys:
