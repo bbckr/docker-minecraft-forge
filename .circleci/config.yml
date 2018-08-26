@@ -31,25 +31,15 @@ jobs:
       - run:
           name: "Tag and Push Docker image to Docker Hub"
           command: |
-          if [ -z $CIRCLE_TAG ]; then
-            docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
-            docker tag minecraft-forge bckr/minecraft-forge:latest
-            docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
-            docker push bckr/minecraft-forge:$CIRCLE_TAG
-          else
-            echo "No tags were pushed. Skip step."
-          fi
+            if [ -z $CIRCLE_TAG ]; then
+              docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+              docker tag minecraft-forge bckr/minecraft-forge:latest
+              docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
+              docker push bckr/minecraft-forge:$CIRCLE_TAG
+            else
+              echo "No tags were pushed. Skip step."
+            fi
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/docker-image-cache.tar
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: /.*/
-            tags:
-              only: /.*/
