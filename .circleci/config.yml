@@ -43,6 +43,11 @@ jobs:
           paths:
             - /caches/docker-image-cache.tar
       - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/docker-image-cache.tar | true
+      - run:
           name: "Tag and Push Docker image to Docker Hub"
           command: |
             docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
