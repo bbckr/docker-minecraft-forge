@@ -32,12 +32,13 @@ jobs:
           name: "Tag and Push Docker image to Docker Hub"
           command: |
             if [ -z $CIRCLE_TAG ]; then
+              echo "No tags were pushed. Skip step."
+            else
               docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
               docker tag minecraft-forge bckr/minecraft-forge:latest
               docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
               docker push bckr/minecraft-forge:$CIRCLE_TAG
-            else
-              echo "No tags were pushed. Skip step."
+              docker push bckr/minecraft-forge:latest
             fi
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
