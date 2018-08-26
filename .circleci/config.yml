@@ -37,17 +37,20 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - setup_remote_docker
-      # - restore_cache:
-      #     keys:
-      #       - v1-{{ .Branch }}
-      #     paths:
-      #       - /caches/docker-image-cache.tar
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/docker-image-cache.tar
       - run:
           name: "Tag and Push Docker image to Docker Hub"
           command: |
-            docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
-            docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
-            docker push bckr/minecraft-forge:$CIRCLE_TAG
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+              docker tag minecraft-forge bckr/minecraft-forge:$CIRCLE_TAG
+              docker tag minecraft-forge bckr/minecraft-forge:latest
+              docker push bckr/minecraft-forge:$CIRCLE_TAG
+            fi
 workflows:
   version: 2
   main:
