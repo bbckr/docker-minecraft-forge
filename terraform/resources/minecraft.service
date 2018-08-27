@@ -1,0 +1,16 @@
+[Unit]
+Description=Minecraft
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=/usr/bin/systemd-docker --logs=false run --rm -p 25565:25565 -p 25575:25575 -v server_data:/server --name minecraft bckr/minecraft-forge:latest
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

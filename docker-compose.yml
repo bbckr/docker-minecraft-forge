@@ -4,6 +4,7 @@ services:
     build: .
     ports:
      - "25565:25565"
+     - "25575:25575"
     volumes:
      - server-data:/server
     container_name: minecraft
