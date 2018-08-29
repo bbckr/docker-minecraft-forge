@@ -29,6 +29,7 @@ resource "digitalocean_droplet" "minecraft" {
       "sudo apt-get install -y systemd-docker",
       "docker login --username=${var.DOCKERHUB_USERNAME} --password=${var.DOCKERHUB_PASSWORD}",
       "sudo systemctl start minecraft.service",
+      "sudo systemctl enable minecraft.service",
       "docker logout"
     ]
   }
