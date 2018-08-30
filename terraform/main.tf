@@ -31,6 +31,7 @@ resource "digitalocean_droplet" "minecraft" {
       "sudo systemctl start minecraft.service",
       "sudo systemctl enable minecraft.service",
       "docker logout",
+      "mkdir /backups",
     ]
   }
 }

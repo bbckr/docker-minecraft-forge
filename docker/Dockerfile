@@ -6,9 +6,9 @@ ENV MINECRAFT_VERS=1.12.2 \
 WORKDIR /server
 
 # Install dependencies
-RUN apk add --update \
-    curl \
-    && rm -rf /var/cache/apk/*
+RUN apk update \
+    && apk add --no-cache \
+    curl
 
 # Download Minecraft Forge installer
 RUN curl -O https://files.minecraftforge.net/maven/net/minecraftforge/forge/${MINECRAFT_VERS}-${FORGE_VERS}/forge-${MINECRAFT_VERS}-${FORGE_VERS}-installer.jar
@@ -22,7 +22,9 @@ FROM openjdk:8-jre-alpine
 
 WORKDIR /server
 
-RUN apk update
+RUN apk update \
+    && apk add --no-cache \
+    zip
 
 # Copy installed minecraft server files from previous layer.
 COPY --from=0 /server .
