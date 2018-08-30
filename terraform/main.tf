@@ -30,7 +30,7 @@ resource "digitalocean_droplet" "minecraft" {
       "docker login --username=${var.DOCKERHUB_USERNAME} --password=${var.DOCKERHUB_PASSWORD}",
       "sudo systemctl start minecraft.service",
       "sudo systemctl enable minecraft.service",
-      "docker logout"
+      "docker logout",
     ]
   }
 }
@@ -38,4 +38,45 @@ resource "digitalocean_droplet" "minecraft" {
 resource "digitalocean_ssh_key" "ssh" {
     name = "Terraform Key"
     public_key = "${file("~/.ssh/digitalocean_key.pub")}"
+}
+
+resource "digitalocean_firewall" "minecraft" {
+  name = "only-ssh-minecraft-rcon"
+
+  droplet_ids = ["${digitalocean_droplet.minecraft.id}"]
+
+  inbound_rule = [
+    {
+      protocol            = "tcp"
+      port_range          = "22"
+      source_addresses    = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol            = "tcp"
+      port_range          = "25565"
+      source_addresses    = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol            = "tcp"
+      port_range          = "25575"
+      source_addresses    = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol            = "icmp"
+      source_addresses    = ["0.0.0.0/0", "::/0"]
+    },
+  ]
+
+   outbound_rule = [
+    {
+      protocol                = "tcp"
+      port_range              = "all"
+      destination_addresses   = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol                = "udp"
+      port_range              = "53"
+      destination_addresses   = ["0.0.0.0/0", "::/0"]
+    },
+  ]
 }

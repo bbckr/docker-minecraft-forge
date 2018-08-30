@@ -6,8 +6,9 @@ ENV MINECRAFT_VERS=1.12.2 \
 WORKDIR /server
 
 # Install dependencies
-RUN apk add --no-cache \
-    curl
+RUN apk add --update \
+    curl \
+    && rm -rf /var/cache/apk/*
 
 # Download Minecraft Forge installer
 RUN curl -O https://files.minecraftforge.net/maven/net/minecraftforge/forge/${MINECRAFT_VERS}-${FORGE_VERS}/forge-${MINECRAFT_VERS}-${FORGE_VERS}-installer.jar
@@ -21,9 +22,19 @@ FROM openjdk:8-jre-alpine
 
 WORKDIR /server
 
-COPY ./server .
+RUN apk update
+
+# Copy installed minecraft server files from previous layer.
 COPY --from=0 /server .
 
-# Expose default Minecraft port and start server
-EXPOSE 25565
+# Copy over accepted EULA and server properties. By running the container you
+# automatically agree to the EULA
+COPY ./server .
+
+# Expose default Minecraft, RCON, and SSH port
+# Note: RCON is not enabled and the RCON password is not set in the server
+# properties at this point.
+EXPOSE 25565 25575
+
+# Start minecraft forge server
 CMD java -jar forge-universal.jar

@@ -1,4 +1,5 @@
-# Docker Minecraft Forge Server
+# minecraft-forge-docker
+A base Minecraft Forge Server docker container managed in Terraform.
 
 ## Running the Container Locally
 ``` bash
@@ -20,9 +21,6 @@ ssh-keygen -b 4096 -t rsa -f digitalocean_key
 
 # For first time set-up
 terraform init 
-
-# View changes before applying
-terraform plan 
 
 # Apply
 terraform apply --auto-approve

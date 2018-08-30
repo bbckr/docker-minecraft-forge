@@ -1,12 +1,12 @@
 version: '3'
 services:
   minecraft:
-    build: .
+    build: ./docker
     ports:
      - "25565:25565"
      - "25575:25575"
     volumes:
-     - server-data:/server
+     - server_data:/server
     container_name: minecraft
 volumes:
-  server-data:
+  server_data:
