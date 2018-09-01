@@ -1,4 +1,5 @@
 FROM openjdk:8-jre-alpine
+LABEL maintainer="Brianna Becker <bri@bckr.io>"
 
 ENV MINECRAFT_VERS=1.12.2 \
     FORGE_VERS=14.23.4.2758
