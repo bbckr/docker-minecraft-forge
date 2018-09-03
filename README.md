@@ -23,7 +23,7 @@ ssh-keygen -b 4096 -t rsa -f digitalocean_key
 terraform init 
 
 # Apply
-terraform apply --auto-approve # optional --var "IMAGE_TAG=X.X.X" to deploy specific image tag, defaults to 'latest'
+terraform apply --auto-approve # optional -var="IMAGE_TAG=X.X.X" to deploy specific image tag, defaults to 'latest'
 ```
 
 ## Git Tags
