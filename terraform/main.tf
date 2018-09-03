@@ -1,5 +1,8 @@
 variable "DOCKERHUB_USERNAME" {}
 variable "DOCKERHUB_PASSWORD" {}
+variable "IMAGE_TAG" {
+  default = "latest"
+  }
 
 provider "digitalocean" {}
 
@@ -25,13 +28,14 @@ resource "digitalocean_droplet" "minecraft" {
   provisioner "remote-exec" {
     inline = [      
       "export PATH=$PATH:/usr/bin",
+      "mkdir /etc/systemd/system/minecraft.service.d",
+      "echo IMAGE_TAG=${var.IMAGE_TAG} > /etc/systemd/system/minecraft.service.d/image-tag.conf",
       "sudo apt-get update",
       "sudo apt-get install -y systemd-docker",
       "docker login --username=${var.DOCKERHUB_USERNAME} --password=${var.DOCKERHUB_PASSWORD}",
       "sudo systemctl start minecraft.service",
       "sudo systemctl enable minecraft.service",
       "docker logout",
-      "mkdir /backups",
     ]
   }
 }
