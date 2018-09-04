@@ -85,3 +85,8 @@ resource "digitalocean_firewall" "minecraft" {
     },
   ]
 }
+
+resource "digitalocean_domain" "default" {
+  name       = "minecraft.towerofswole.com"
+  ip_address = "${digitalocean_droplet.minecraft.ipv4_address}"
+}
