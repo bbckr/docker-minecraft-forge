@@ -7,8 +7,9 @@ docker-compose up -d
 ```
 
 ## Deploying the Infrastructure
+The exported environment variables below will be configured to the terraform DigitalOcean provider when you apply. There is no need to specify it in the provider.
 ``` bash
-# Deploys to DigitalOcean default project
+# Required steps before deploying to the DigitalOcean default project
 # https://www.digitalocean.com/docs/api/create-personal-access-token/
 export DIGITALOCEAN_TOKEN=TOKEN
 
@@ -20,10 +21,10 @@ export TF_VAR_DOCKERHUB_PASSWORD=PASSWORD
 ssh-keygen -b 4096 -t rsa -f digitalocean_key
 
 # For first time set-up
-terraform init 
+terraform init terraform/
 
 # Apply
-terraform apply --auto-approve # optional -var="IMAGE_TAG=X.X.X" to deploy specific image tag, defaults to 'latest'
+terraform apply --auto-approve terraform/ # optional -var="IMAGE_TAG=X.X.X" to deploy specific image tag, defaults to 'latest'
 ```
 
 ## Git Tags
