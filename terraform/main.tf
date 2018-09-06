@@ -1,3 +1,4 @@
+# TODO: Include terraform as part of the pipeline
 variable "DOCKERHUB_USERNAME" {}
 variable "DOCKERHUB_PASSWORD" {}
 variable "IMAGE_TAG" {
