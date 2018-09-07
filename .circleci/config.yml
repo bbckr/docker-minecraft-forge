@@ -3,9 +3,6 @@ jobs:
   build:
     docker:
       - image: docker:17.05.0-ce-git
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - setup_remote_docker
@@ -49,6 +46,7 @@ workflows:
   build:
     jobs:
       - build:
+          context: dockerhub
           filters:
             branches:
               only: /.*/
