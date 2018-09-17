@@ -1,4 +1,4 @@
-# minecraft-forge-docker
+# minecraft-server-docker
 A base Minecraft Forge Server docker container managed in Terraform.
 
 ## Running the Container Locally
