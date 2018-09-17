@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "minecraft" {
     }
 
   provisioner "file" {
-    source      = "./resources/minecraft.service"
+    source      = "./terraform/resources/minecraft.service"
     destination = "/lib/systemd/system/minecraft.service"
   }
 
