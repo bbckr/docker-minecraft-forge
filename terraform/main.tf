@@ -31,6 +31,7 @@ resource "digitalocean_droplet" "minecraft" {
       "export PATH=$PATH:/usr/bin",
       "mkdir /etc/systemd/system/minecraft.service.d",
       "echo IMAGE_TAG=${var.IMAGE_TAG} > /etc/systemd/system/minecraft.service.d/image-tag.conf",
+      "sudo apt-get clean && rm -rf /var/lib/apt/lists/partial/*",
       "sudo apt-get update",
       "sudo apt-get install -y systemd-docker",
       "docker login --username=${var.DOCKERHUB_USERNAME} --password=${var.DOCKERHUB_PASSWORD}",
