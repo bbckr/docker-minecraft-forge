@@ -8,10 +8,10 @@ variable "IMAGE_TAG" {
 provider "digitalocean" {}
 
 resource "digitalocean_droplet" "minecraft" {
-  image       = "docker-16-04"
+  image       = "docker-18-04"
   name        = "minecraft-server"
   region      = "nyc1"
-  size        = "s-1vcpu-1gb"
+  size        = "s-4vcpu-8gb"
   ssh_keys    = ["${digitalocean_ssh_key.ssh.id}"] 
 
   connection {
